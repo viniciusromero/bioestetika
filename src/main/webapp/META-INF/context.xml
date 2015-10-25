@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Context>
+	<WatchedResource>WEB-INF/web.xml</WatchedResource>
+	
+	<Resource name="jdbc/bioestetikaDataSource" auth="Container"
+          type="javax.sql.DataSource" driverClassName="org.postgresql.Driver"
+          url="jdbc:postgresql://localhost:5432/bioestetika"
+          username="postgres" password="reload" maxTotal="20" maxIdle="10"
+		  maxWaitMillis="-1"/>
+	<!-- 
+    <Resource
+            factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+            name="jdbc/timesheetDataSource"
+            auth="Container"
+            type="javax.sql.DataSource"
+            initialSize="1"
+            maxActive="20"
+            maxIdle="3"
+            minIdle="1"
+            maxWait="5000"
+            username="postgres"
+            password="Reload87"
+            driverClassName="org.postgresql.Driver"
+            validationQuery="SELECT 'OK'"
+            testWhileIdle="true"
+            testOnBorrow="true"
+            numTestsPerEvictionRun="5"
+            timeBetweenEvictionRunsMillis="30000"
+            minEvictableIdleTimeMillis="60000"
+            url="jdbc:postgresql://localhost:5432/timesheet" />
+	 -->
+</Context>
