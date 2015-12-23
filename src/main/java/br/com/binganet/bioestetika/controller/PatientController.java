@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import br.com.binganet.bioestetika.model.Patient;
 import br.com.binganet.bioestetika.vo.PatientListVO;
@@ -24,6 +27,7 @@ import br.com.binganet.bioestetika.service.PatientService;
 
 @Controller
 @RequestMapping(value = "/protected/patients")
+@SessionAttributes("patientSelected")
 public class PatientController {
 	
 	private static final String DEFAULT_PAGE_DISPLAYED_TO_USER = "0";
@@ -36,10 +40,14 @@ public class PatientController {
 
     @Value("5")
     private int maxResults;
-
+    
+    private ModelAndView modelAndView;
+    
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView welcome() {
-        return new ModelAndView("patientsList");
+    public ModelAndView welcome(SessionStatus sessionStatus) {
+    	modelAndView = new ModelAndView("patientsList");  
+    	sessionStatus.setComplete();
+        return modelAndView;
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
@@ -99,7 +107,16 @@ public class PatientController {
 
         return createListAllResponse(page, locale, "message.delete.success");
     }
-
+    
+    @RequestMapping(value="/addPatientSession")
+    public ModelAndView selectPatient(@RequestBody Patient patient){    	
+    	RedirectView red = new RedirectView("/protected/admissions",true);
+    	
+    	modelAndView.setView(red);
+    	modelAndView.addObject("patientSelected", patient);    	    
+    	
+    	return modelAndView;
+    }
     @RequestMapping(value = "/nome/{name}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<?> search(@PathVariable("name") String name,
                                     @RequestParam(required = false, defaultValue = DEFAULT_PAGE_DISPLAYED_TO_USER) int page,

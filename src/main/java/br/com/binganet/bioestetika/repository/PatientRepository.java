@@ -8,4 +8,5 @@ import br.com.binganet.bioestetika.model.Patient;
 
 public interface PatientRepository extends PagingAndSortingRepository<Patient, Integer> {
     Page<Patient> findByNameLike(Pageable pageable, String name);
+    Patient findById(int id);
 }

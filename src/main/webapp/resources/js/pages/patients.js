@@ -1,18 +1,18 @@
-function patientsController($scope, $http) {
+function patientsController($scope, $http, $filter) {
     $scope.pageToGet = 0;
-
+    
     $scope.state = 'busy';
 
     $scope.lastAction = '';
 
-    $scope.url = "/bioestetika/protected/patients/";
+    $scope.url = "/bioestetika/protected/patients/";       
     
     $scope.errorOnSubmit = false;
     $scope.errorIllegalAccess = false;
     $scope.displayMessageToUser = false;
     $scope.displayValidationError = false;
     $scope.displaySearchMessage = false;
-    $scope.displaySearchButton = false;
+    $scope.displaySearchButton = true;
     $scope.displayCreatePatientButton = false;
     $scope.patient = {}
 
@@ -27,13 +27,12 @@ function patientsController($scope, $http) {
         var config = {params: {page: $scope.pageToGet}};
         
         $http.get(url, config)
-            .success(function (data) {
-            	
+            .success(function (data) {            	
                 $scope.finishAjaxCallOnSuccess(data, null, false);
             })
             .error(function () {
                 $scope.state = 'error';
-                $scope.displayCreatePatientButton = false;
+                $scope.displayCreatePatientButton = false;                
             });
     }
     
@@ -89,9 +88,8 @@ function patientsController($scope, $http) {
     }
 
     $scope.finishAjaxCallOnSuccess = function (data, modalId, isPagination) {
-        $scope.populateTable(data);
-        $("#loadingModal").modal('hide');
-
+    	$("#loadingModal").modal('hide');
+    	$scope.populateTable(data);        
         if(!isPagination){
             if(modalId){
                 $scope.exit(modalId);
@@ -164,12 +162,25 @@ function patientsController($scope, $http) {
     };
 
     $scope.selectedPatient = function (patient) {
-    	alert(patient);
-        var selectedPatient = angular.copy(patient);
-        alert(selectedPatient.name);
+    	var selectedPatient = angular.copy(patient);
+    	
+    	//format date of birth
+    	var dateObj = new Date(selectedPatient.dob);
+    	selectedPatient.dob = $filter('date')(dateObj,'dd/MM/yyyy');
+    	
         $scope.patient = selectedPatient;
     }
-
+    
+    $scope.addPatientSession = function (patient)
+    {
+    	$scope.lastAction = 'addPatientSession';
+    	
+    	var url = $scope.url + $scope.lastAction
+    	
+    	$http.put(url, patient)
+    	
+    }
+    
     $scope.updatePatient = function (updatePatientForm) {
         if (!updatePatientForm.$valid) {
             $scope.displayValidationError = true;
@@ -204,7 +215,6 @@ function patientsController($scope, $http) {
         $scope.lastAction = 'search';
 
         var url = $scope.url + 'nome/'+ $scope.searchFor;
-        alert(url);
         $scope.startDialogAjaxRequest();
 
         var config = {};
@@ -214,7 +224,7 @@ function patientsController($scope, $http) {
         }
 
         $http.get(url, config)
-            .success(function (data) {
+            .success(function (data) {            	
                 $scope.finishAjaxCallOnSuccess(data, "#searchPatientsModal", isPagination);
                 $scope.displaySearchMessage = true;
             })
@@ -251,5 +261,5 @@ function patientsController($scope, $http) {
         $scope.displaySearchMessage = false;
     }
 
-    $scope.getPatientList();
+    //$scope.getPatientList();
 }

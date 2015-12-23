@@ -24,17 +24,14 @@ public class Patient {
 	private Date dob;
 	
 	@Column(name="papat_mobilephone")
-	private String mobilephone;
-	
-	@Column(name="papat_zipcode")
-	private String zipcode;
+	private String mobilephone;	
 	
 	@Column(name="papat_address")
 	private String address;
 	
 	@Column(name="papat_email")
 	private String email;
-
+	
 	public int getId() {
 		return id;
 	}
@@ -65,14 +62,6 @@ public class Patient {
 
 	public void setMobilephone(String mobilephone) {
 		this.mobilephone = mobilephone;
-	}
-
-	public String getZipcode() {
-		return zipcode;
-	}
-
-	public void setZipcode(String zipcode) {
-		this.zipcode = zipcode;
 	}
 
 	public String getAddress() {

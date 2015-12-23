@@ -3,10 +3,13 @@ package br.com.binganet.bioestetika.model;
 import java.util.Date;
 import java.sql.Time;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -32,8 +35,9 @@ public class Admission {
 	
 	@Column(name="paadm_observations", length=500)
 	private String observations;
-	
-	@Column(name="paadm_patient_dr")
+		
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="paadm_patient_dr")
 	private Patient patient;
 	
 	public int getId() {

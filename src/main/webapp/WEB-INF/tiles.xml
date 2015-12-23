@@ -16,6 +16,9 @@
     <definition name="patientsList" extends="master.page">
         <put-attribute name="body" value="/protected/patients/patients.jsp"/>
     </definition>
+    <definition name="admissionsList" extends="master.page">
+        <put-attribute name="body" value="/protected/admissions/admissions.jsp"/>
+    </definition>
     <definition name="login" extends="master.page">
         <put-attribute name="header" value=""/>
         <put-attribute name="footer" value=""/>

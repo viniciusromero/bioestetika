@@ -1,17 +1,17 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<div id="addPatientsModal"
+<div id="addAdmissionsModal"
      class="modal fade in insertAndUpdateDialogs"
      role="dialog"
-     aria-labelledby="addPatientsModalLabel"
+     aria-labelledby="addAdmissionsModalLabel"
      aria-hidden="true"
      data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">    	
 	    <div class="modal-content">
 	    	 <div class="modal-header">
 		        <h4 id="addPatientsModalLabel" class="displayInLine">
-		            <spring:message code="create"/>&nbsp;<spring:message code="patient"/>
+		            <spring:message code="create"/>&nbsp;<spring:message code="admissions"/>
 		        </h4>
 		     </div>
 		     <div class="modal-body">
@@ -122,7 +122,7 @@
 	</div>    
 </div>
 
-<div id="updatePatientsModal"
+<div id="updateAdmissionsModal"
      class="modal fade in insertAndUpdateDialogs"
      role="dialog"
      aria-labelledby="updatePatientsModalLabel"
@@ -250,35 +250,30 @@
 	</div>    
 </div>
 
-<div id="deletePatientsModal"
+<div id="listAnamenesesModal"
      class="modal fade in insertAndUpdateDialogs"
      role="dialog"
-     aria-labelledby="deletePatientsModalLabel"
+     aria-labelledby="listAnamenesesModalLabel"
      aria-hidden="true"
      data-backdrop="static" data-keyboard="false">	         
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
     <div class="modal-content">
 	    <div class="modal-header">
-	        <h3 id="deletePatientsModalLabel" class="displayInLine">
-	            <spring:message code="delete"/>&nbsp;<spring:message code="patient"/>
+	        <h3 id="listAnamenesesModalLabel" class="displayInLine">
+	            <spring:message code="list"/>&nbsp;<spring:message code="anameneses"/>
 	        </h3>
 	    </div>
 	    <div class="modal-body">
-	        <form name="deletePatientForm" novalidate>
-	            <p><spring:message code="delete.confirm"/>:&nbsp;{{patient.name}}?</p>		           
-	        </form>
+	        
+	        
 	    </div>
 	    <div class="modal-footer">	    	
             <button class="btn btn-default"
                     data-dismiss="modal"
-                    ng-click="exit('#deletePatientsModal');"
+                    ng-click="exit('#listAnamenesesModal');"
                     aria-hidden="true">
                 <spring:message code="cancel"/>
-            </button>
-            <input type="submit"
-                   class="btn btn-danger"
-                   ng-click="deletePatient();"
-                   value='<spring:message code="delete"/>'/>
+            </button>            
 		</div>	            
 	    <span class="alert alert-error dialogErrorMessage"
 	          ng-show="errorOnSubmit">

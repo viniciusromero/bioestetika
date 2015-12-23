@@ -2,40 +2,33 @@
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<div class="pagebody" ng-controller="patientsController" id="patientsController">
-	
-	<div class="panel panel-primary">
+<div class="pagebody" ng-controller="admissionsController" id="admissionsController">
+
+    <div ng-class="{'panel panel-primary': state != 'nosession', 'none': state == 'nosession'}">
 	  <div class="panel-heading">
-	    <h3 class="panel-title"><spring:message code="search.for"/></h3>
+	    <h3 class="panel-title">Informações do Paciente</h3>
 	  </div>
-	  <div class="panel-body">	    
-    	<form class="form-inline" name="searchPatientForm" novalidate>    		
-    		<div class="form-group">
-    			<input type="text"
-	                   autofocus
-	                   required
-	                   ng-model="searchFor"
-	                   name="searchFor"                           
-	                   placeholder="<spring:message code='patient'/>&nbsp;<spring:message code='patients.name'/> "/>
-	            <span class="alert alert-danger"
-	                  ng-show="displayValidationError && searchPatientForm.searchFor.$error.required">
-	                <spring:message code="required"/>
-	            </span>                   
-                
-	            <input type="submit"
-	                  class="btn btn-default"
-	                  ng-click="searchPatient(searchPatientForm, false);"
-	                  value='<spring:message code="search"/>' />
-	                              	           
-            </div>
-       	</form>    	
+	  <div class="panel-body">
+	    <dl class = "dl-horizontal">
+	    	<dt><spring:message code='patients.id'/></dt>
+    		<dd>{{patient.id}}</dd>
+    		<dt><spring:message code='patients.name'/></dt>
+    		<dd>{{patient.name}}</dd>
+    		<dt><spring:message code='patients.dob'/></dt>
+    		<dd>{{patient.dob | date : 'dd/MM/yyyy'}}</dd>
+    	</dl>
 	  </div>
 	</div>
+   	<div ng-class="{'alert alert-info': state == 'nosession', 'none': state != 'nosession'}">
+    	<h4><i class="icon-info-sign"></i> <spring:message code="admissions.patient.emptyData"/></h4><br/>            
+    </div>
+
+                 
 
     <h4>
         <div ng-class="{'': state == 'list', 'none': state != 'list'}">
             <p class="text-center">
-                <spring:message code="message.total.records.found"/>:&nbsp;{{page.totalPatients}}
+                <spring:message code="message.total.records.found"/>:&nbsp;{{page.totalAdmissions}}
             </p>
         </div>
     </h4>
@@ -68,52 +61,53 @@
             <p><spring:message code="error.generic.text"/></p>
         </div>
 
-        <div ng-class="{'alert alert-info': state == 'noresult', 'none': state != 'noresult'}">
-            <h4><i class="icon-info-sign"></i> <spring:message code="patients.emptyData"/></h4><br/>
-
-            <p><spring:message code="patients.emptyData.text"/></p>
-        </div>
+        
 
         <div id="gridContainer" ng-class="{'': state == 'list', 'none': state != 'list'}">
             <table class="table table-hover">
                 <thead>
                 <tr>
-                	<th scope="col"><spring:message code="patients.id"/></th>
-                    <th scope="col"><spring:message code="patients.name"/></th>
-                    <th scope="col"><spring:message code="patients.dob"/></th>                    
+                	<th scope="col"><spring:message code="admissions.id"/></th>
+                    <th scope="col"><spring:message code="admissions.admdate"/></th>
+                    <th scope="col"><spring:message code="admissions.admtime"/></th>
+                    <th scope="col"><spring:message code="admissions.dischgdate"/></th>
+                    <th scope="col"><spring:message code="admissions.dischgtime"/></th>                    
                     <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="patient in page.source">
-                    <td ng-click="addPatientSession(patient);" class="tdTableData">{{patient.id}}</td>
-                    <td ng-click="addPatientSession(patient);" class="tdTableData">{{patient.name}}</td>
-                    <td ng-click="addPatientSession(patient);" class="tdTableData">{{patient.dob | date:'dd/MM/yyyy'}}</td>
+                <tr ng-repeat="admission in page.source">                	
+                    <td>{{admission.id}}</td>
+                    <td>{{admission.admdate | date:'dd/MM/yyyy'}}</td>
+                    <td>{{admission.admtime | date:'HH:mm'}}</td>
+                    <td>{{admission.dischgdate | date:'dd/MM/yyyy'}}</td>
+                    <td>{{admission.dischgtime | date:'HH:mm'}}</td>
                     <td class="width15">
                         <div class="text-center">
-                            <input type="hidden" value="{{patient.id}}"/>
-                            <a href="#updatePatientsModal"
-                               ng-click="selectedPatient(patient);"
+                            <input type="hidden" value="{{admission.id}}"/>
+                            <a href="#updateAdmissionsModal"
+                               ng-click="selectedAdmission(admission);"
                                role="button"
-                               title="<spring:message code="update"/>&nbsp;<spring:message code="patient"/>"
+                               title="<spring:message code="update"/>&nbsp;<spring:message code="admissions"/>"
                                class="btn btn-default" data-toggle="modal">
                                 <i class="glyphicon glyphicon-pencil"></i>
-                            </a>
-                            <a href="#deletePatientsModal"
-                               ng-click="selectedPatient(patient);"
+                            </a>                                                    
+                            <input type="hidden" value="{{admission.id}}"/>
+                            <a href="#listAnamenesesModal"
+                               ng-click="selectedAdmission(admission);"
                                role="button"
-                               title="<spring:message code="delete"/>&nbsp;<spring:message code="patient"/>"
+                               title="<spring:message code="list"/>&nbsp;<spring:message code="anameneses"/>"
                                class="btn btn-default" data-toggle="modal">
-                                <i class="glyphicon glyphicon-remove"></i>
-                            </a>
+                                <i class="glyphicon glyphicon-list"></i>
+                            </a>                            
                         </div>
-                    </td>
+                    </td>                    
                 </tr>
                 </tbody>
             </table>
 
             <div class="text-center">
-                <button href="#" class="btn btn-default"
+                <button href="#" class="btn btn-inverse"
                         ng-class="{'btn-inverse': page.currentPage != 0, 'disabled': page.currentPage == 0}"
                         ng-disabled="page.currentPage == 0" ng-click="changePage(0)"
                         title='<spring:message code="pagination.first"/>'
@@ -121,49 +115,48 @@
                     <spring:message code="pagination.first"/>
                 </button>
                 <button href="#"
-                        class="btn btn-default"
-                        ng-class="{'btn-default': page.currentPage != 0, 'disabled': page.currentPage == 0}"
+                        class="btn btn-inverse"
+                        ng-class="{'btn-inverse': page.currentPage != 0, 'disabled': page.currentPage == 0}"
                         ng-disabled="page.currentPage == 0" class="btn btn-inverse"
                         ng-click="changePage(page.currentPage - 1)"
                         title='<spring:message code="pagination.back"/>'
                         >&lt;</button>
                 <span>{{page.currentPage + 1}} <spring:message code="pagination.of"/> {{page.pagesCount}}</span>
                 <button href="#"
-                        class="btn btn-default"
-                        ng-class="{'btn-default': page.pagesCount - 1 != page.currentPage, 'disabled': page.pagesCount - 1 == page.currentPage}"
+                        class="btn btn-inverse"
+                        ng-class="{'btn-inverse': page.pagesCount - 1 != page.currentPage, 'disabled': page.pagesCount - 1 == page.currentPage}"
                         ng-click="changePage(page.currentPage + 1)"
                         ng-disabled="page.pagesCount - 1 == page.currentPage"
                         title='<spring:message code="pagination.next"/>'
                         >&gt;</button>
                 <button href="#"
-                        class="btn btn-default"
-                        ng-class="{'btn-default': page.pagesCount - 1 != page.currentPage, 'disabled': page.pagesCount - 1 == page.currentPage}"
+                        class="btn btn-inverse"
+                        ng-class="{'btn-inverse': page.pagesCount - 1 != page.currentPage, 'disabled': page.pagesCount - 1 == page.currentPage}"
                         ng-disabled="page.pagesCount - 1 == page.currentPage"
                         ng-click="changePage(page.pagesCount - 1)"
                         title='<spring:message code="pagination.last"/>'
                         >
                     <spring:message code="pagination.last"/>
                 </button>
+                
+
             </div>
         </div>
-        <div ng-class="{'text-center': displayCreatePatientButton == true, 'none': displayCreatePatientButton == false}">
+        <div ng-class="{'text-center': displayCreateAdmissionButton == true, 'none': displayCreateAdmissionButton == false}">
             <br/>
-            <a href="#addPatientsModal"
+            <a href="#addAdmissionsModal"
                role="button"
-               ng-click="resetPatient();"
-               title="<spring:message code='create'/>&nbsp;<spring:message code='patient'/>"
+               ng-click="resetAdmission();"
+               title="<spring:message code='create'/>&nbsp;<spring:message code='admissions'/>"
                class="btn btn-primary"
                data-toggle="modal">
                 <i class="glyphicon glyphicon-plus"></i>
-                &nbsp;&nbsp;<spring:message code="create"/>&nbsp;<spring:message code="patient"/>
+                &nbsp;&nbsp;<spring:message code="create"/>&nbsp;<spring:message code="admissions"/>
             </a>
          </div>
-         <jsp:include page="dialogs/patientsDialogs.jsp"/>
-         
-         
+         <jsp:include page="dialogs/admissionsDialogs.jsp"/>     
 	</div>
-	
-	
+
 </div>
 
-<script src="<c:url value="/resources/js/pages/patients.js" />"></script>
+<script src="<c:url value="/resources/js/pages/admissions.js" />"></script>

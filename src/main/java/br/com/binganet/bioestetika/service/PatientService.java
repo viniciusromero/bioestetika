@@ -51,6 +51,13 @@ public class PatientService {
 
         return buildResult(result);
     }
+    
+    @Transactional(readOnly = true)
+    public Patient findById(int patientId) {
+        Patient result = executeQueryFindById(patientId);
+
+        return result;
+    }
 
     private boolean shouldExecuteSameQueryInLastPage(int page, Page<Patient> result) {
         return isUserAfterOrOnLastPage(page, result) && hasDataInDataBase(result);
@@ -74,6 +81,10 @@ public class PatientService {
         final PageRequest pageRequest = new PageRequest(page, maxResults, sortByNameASC());
 
         return PatientRepository.findByNameLike(pageRequest, "%" + name + "%");
+    }
+    
+    private Patient executeQueryFindById(int id) {        
+        return PatientRepository.findById(id);
     }
 
     private boolean isUserAfterOrOnLastPage(int page, Page<Patient> result) {

@@ -5,8 +5,7 @@
 <html lang="pt-BR" id="ng-app" ng-app="">
 <head>
         <title><spring:message  code="project.title" /></title>
-        <link href="<c:url value='/resources/css/bootstrap.min.css'  />" rel="stylesheet"/>
-        <link href="<c:url value='/resources/css/bootstrap-responsive.min.css'  />" rel="stylesheet"/>
+        <link href="<c:url value='/resources/css/bootstrap.min.css'  />" rel="stylesheet"/>        
         <link href="<c:url value='/resources/css/project_style.css'  />" rel="stylesheet"/>
         <script src="<c:url value='/resources/js/jquery-1.9.1.min.js' />"></script>
         <script src="<c:url value='/resources/js/angular.min.js' />"></script>
@@ -27,5 +26,21 @@
         <!--<![endif]-->
  
         <tiles:insertAttribute name="footer" />
+        
+        <div id="loadingModal" class="modal fade in"
+             role="dialog"
+             aria-labelledby="deletePatientsModalLabel" aria-hidden="true"
+     		 data-backdrop="static" data-keyboard="false">
+             <div class="modal-dialog modal-sm center-modal-sm">
+             	<div class="modal-content">
+             		<div class="modal-body">
+             			<img src="<c:url value='/resources/img/ajax-loader.gif' />" />
+             			<p/>
+             			<spring:message code="loading"/>             			
+             		</div>
+             	</div>
+             </div>                                
+        </div>
+        
     </body>
 </html>
