@@ -30,12 +30,16 @@ public class AdmissionService {
         return buildResult(result);
     }
 	
+	public void save(Admission admission) {
+		AdmissionRepository.save(admission);        
+    }
+	
 	private boolean shouldExecuteSameQueryInLastPage(int page, Page<Admission> result) {
         return isUserAfterOrOnLastPage(page, result) && hasDataInDataBase(result);
     }
 
     private Page<Admission> executeQueryFindAllByPatientId(int page, int maxResults, int patientId) {
-        final PageRequest pageRequest = new PageRequest(page, maxResults, sortByAdmDateASC());
+        final PageRequest pageRequest = new PageRequest(page, maxResults, sortByAdmDateDESC());
 
         return AdmissionRepository.findByPatientId(pageRequest, patientId);
     }
@@ -54,5 +58,9 @@ public class AdmissionService {
     
     private Sort sortByAdmDateASC() {
         return new Sort(Sort.Direction.ASC, "admdate");
+    }
+    
+    private Sort sortByAdmDateDESC() {
+        return new Sort(Sort.Direction.DESC, "admdate");
     }
 }

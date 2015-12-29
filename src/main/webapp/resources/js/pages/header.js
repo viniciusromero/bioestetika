@@ -5,6 +5,9 @@ function LocationController($scope, $location) {
     else if ($location.$$absUrl.lastIndexOf('/admissions') > 0){
     	$scope.activeURL = 'admissions';
     }
+    else if ($location.$$absUrl.lastIndexOf('/anameneses') > 0){
+    	$scope.activeURL = 'anameneses';
+    }    
     else{
         $scope.activeURL = 'home';
     }

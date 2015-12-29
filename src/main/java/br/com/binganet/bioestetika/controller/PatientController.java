@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import br.com.binganet.bioestetika.model.Patient;
 import br.com.binganet.bioestetika.vo.PatientListVO;
@@ -56,7 +54,7 @@ public class PatientController {
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = "application/json")
-    public ResponseEntity<?> create(@ModelAttribute("patient") Patient patient,
+    public ResponseEntity<?> create(@RequestBody Patient patient,
                                     @RequestParam(required = false) String searchFor,
                                     @RequestParam(required = false, defaultValue = DEFAULT_PAGE_DISPLAYED_TO_USER) int page,
                                     Locale locale) {
@@ -75,7 +73,7 @@ public class PatientController {
                                     @RequestParam(required = false) String searchFor,
                                     @RequestParam(required = false, defaultValue = DEFAULT_PAGE_DISPLAYED_TO_USER) int page,
                                     Locale locale) {
-        if (patientId != patient.getId()) {
+    	if (patientId != patient.getId()) {
             return new ResponseEntity<String>("Bad Request", HttpStatus.BAD_REQUEST);
         }
 
@@ -110,9 +108,6 @@ public class PatientController {
     
     @RequestMapping(value="/addPatientSession")
     public ModelAndView selectPatient(@RequestBody Patient patient){    	
-    	RedirectView red = new RedirectView("/protected/admissions",true);
-    	
-    	modelAndView.setView(red);
     	modelAndView.addObject("patientSelected", patient);    	    
     	
     	return modelAndView;

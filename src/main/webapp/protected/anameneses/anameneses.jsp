@@ -2,38 +2,51 @@
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<div class="pagebody" ng-controller="admissionsController" id="admissionsController">
-
-    <div ng-class="{'panel panel-primary': state != 'nosession', 'none': state == 'nosession'}">
+<div class="pagebody" ng-controller="anamenesesController" id="anamenesesController">
+	<div ng-class="{'panel panel-primary': state != 'nosession', 'none': state == 'nosession'}">      
 	  <div class="panel-heading">
-	    <h3 class="panel-title"><spring:message code='admissions.title'/></h3>
+	    <h3 class="panel-title"><spring:message code='anameneses.title'/></h3>
 	  </div>
 	  <div class="panel-body">
+	  	<div class="row"> 	
 	    <div class="col-md-3">		            	
-       		<b><spring:message code='patients.id'/>:</b>&nbsp;{{patient.id}}       		
+       		<b><spring:message code='patients.id'/>:</b>&nbsp;{{admission.patient.id}}       		
+       	</div>
+       	<div class="col-md-4">	
+       		<b><spring:message code='patients.name'/>:</b>&nbsp;{{admission.patient.name}}
        	</div>
        	<div class="col-md-3">	
-       		<b><spring:message code='patients.name'/>:</b>&nbsp;{{patient.name}}
+       		<b><spring:message code='patients.dob'/>:</b>&nbsp;{{admission.patient.dob | date : 'dd/MM/yyyy'}}
+       	</div>
+       	</div>       	
+       	<div class="row">
+       	<p/> 	
+	    <div class="col-md-3">		            	
+       		<b><spring:message code='admissions.id'/>:</b>&nbsp;{{admission.id}}       		
+       	</div>
+       	<div class="col-md-4">	
+       		<b><spring:message code='admissions.admdate'/>:</b>&nbsp;{{admission.admdate | date : 'dd/MM/yyyy'}}
        	</div>
        	<div class="col-md-3">	
-       		<b><spring:message code='patients.dob'/>:</b>&nbsp;{{patient.dob | date : 'dd/MM/yyyy'}}
+       		<b><spring:message code='admissions.admtime'/>:</b>&nbsp;{{admission.admtime | date : 'hh:mm'}}
+       	</div>
        	</div>
 	  </div>
 	</div>
    	<div ng-class="{'alert alert-info': state == 'nosession', 'none': state != 'nosession'}">
-    	<h4><i class="icon-info-sign"></i> <spring:message code="admissions.patient.emptyData"/></h4><br/>            
+    	<h4><i class="icon-info-sign"></i> <spring:message code="anameneses.admission.emptyData"/></h4><br/>            
     </div>
     <h4>
         <div ng-class="{'': state == 'list', 'none': state != 'list'}">
             <p class="text-center">
-                <spring:message code="message.total.records.found"/>:&nbsp;{{page.totalAdmissions}}
+                <spring:message code="message.total.records.found"/>:&nbsp;{{page.totalAnameneses}}
             </p>
         </div>
     </h4>
     <div ng-class="{'alert alert-info': state == 'noresult', 'none': state != 'noresult'}">
-            <h4><i class="icon-info-sign"></i> <spring:message code="admissions.emptyData"/></h4><br/>
+            <h4><i class="icon-info-sign"></i> <spring:message code="anameneses.emptyData"/></h4><br/>
 
-            <p><spring:message code="admissions.emptyData.text"/></p>
+            <p><spring:message code="anameneses.emptyData.text"/></p>
         </div>
     <div>        
 		
@@ -45,39 +58,29 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                	<th scope="col"><spring:message code="admissions.id"/></th>
-                    <th scope="col"><spring:message code="admissions.admdate"/></th>
-                    <th scope="col"><spring:message code="admissions.admtime"/></th>
-                    <th scope="col"><spring:message code="admissions.dischgdate"/></th>
-                    <th scope="col"><spring:message code="admissions.dischgtime"/></th>                    
+                	<th scope="col"><spring:message code="anameneses.id"/></th>
+                    <th scope="col"><spring:message code="anameneses.description"/></th>
+                    <th scope="col"><spring:message code="anameneses.updatedate"/></th>
+                    <th scope="col"><spring:message code="anameneses.updatetime"/></th>                                       
                     <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="admission in page.source">                	
-                    <td class="tdTableData">{{admission.id}}</td>
-                    <td class="tdTableData">{{admission.admdate | date:'dd/MM/yyyy'}}</td>
-                    <td class="tdTableData">{{admission.admtime | date:'HH:mm'}}</td>
-                    <td class="tdTableData">{{admission.dischgdate | date:'dd/MM/yyyy'}}</td>
-                    <td class="tdTableData">{{admission.dischgtime | date:'HH:mm'}}</td>
+                <tr ng-repeat="anamenese in page.source">                	
+                    <td class="tdTableData">{{anamenese.id}}</td>
+                    <td class="tdTableData">{{anamenese.description}}</td>                    
+                    <td class="tdTableData">{{anamenese.updatedate | date:'dd/MM/yyyy'}}</td>
+                    <td class="tdTableData">{{anamenese.updatetime | date:'HH:mm'}}</td>
                     <td class="width15">
                         <div class="text-center">
-                            <input type="hidden" value="{{admission.id}}"/>
-                            <a href="#updateAdmissionsModal"
-                               ng-click="selectedAdmission(admission);"
+                            <input type="hidden" value="{{anamenese.id}}"/>
+                            <a href="#updateAnamenesesModal"
+                               ng-click="selectedAnamenese(anamenese);"
                                role="button"
-                               title="<spring:message code="update"/>&nbsp;<spring:message code="admissions"/>"
+                               title="<spring:message code="update"/>&nbsp;<spring:message code="anameneses"/>"
                                class="btn btn-default" data-toggle="modal">
                                 <i class="glyphicon glyphicon-pencil"></i>
-                            </a>                                                    
-                            <input type="hidden" value="{{admission.id}}"/>
-                            <a href="{{urlanamenese}}"
-                               ng-click="addAdmissionSession(admission);"
-                               role="button"
-                               title="<spring:message code="list"/>&nbsp;<spring:message code="anameneses"/>"
-                               class="btn btn-default" data-toggle="modal">
-                                <i class="glyphicon glyphicon-list"></i>
-                            </a>                                                      
+                            </a>                                                                                                                                                               
                         </div>
                     </td>                    
                 </tr>
@@ -119,21 +122,21 @@
 
             </div>
         </div>
-        <div ng-class="{'text-center': displayCreateAdmissionButton == true, 'none': displayCreateAdmissionButton == false}">
+        <div ng-class="{'text-center': displayCreateAnameneseButton == true, 'none': displayCreateAnameneseButton == false}">
             <br/>
-            <a href="#addAdmissionsModal"
+            <a href="#addAnamenesesModal"
                role="button"
-               ng-click="resetAdmission();"
-               title="<spring:message code='create'/>&nbsp;<spring:message code='admissions'/>"
+               ng-click="resetAnamenese();"
+               title="<spring:message code='create'/>&nbsp;<spring:message code='anameneses'/>"
                class="btn btn-primary"
                data-toggle="modal">
                 <i class="glyphicon glyphicon-plus"></i>
-                &nbsp;&nbsp;<spring:message code="create"/>&nbsp;<spring:message code="admissions"/>
+                &nbsp;&nbsp;<spring:message code="create"/>&nbsp;<spring:message code="anameneses"/>
             </a>
          </div>
-         <jsp:include page="dialogs/admissionsDialogs.jsp"/>     
+         <jsp:include page="dialogs/anamenesesDialogs.jsp"/>     
 	</div>
 
 </div>
 
-<script src="<c:url value="/resources/js/pages/admissions.js" />"></script>
+<script src="<c:url value="/resources/js/pages/anameneses.js" />"></script>

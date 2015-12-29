@@ -7,9 +7,10 @@
         <title><spring:message  code="project.title" /></title>
         <link href="<c:url value='/resources/css/bootstrap.min.css'  />" rel="stylesheet"/>        
         <link href="<c:url value='/resources/css/project_style.css'  />" rel="stylesheet"/>
-        <script src="<c:url value='/resources/js/jquery-1.9.1.min.js' />"></script>
+        <script src="<c:url value='/resources/js/jquery-1.11.3.min.js' />"></script>
         <script src="<c:url value='/resources/js/angular.min.js' />"></script>
         <script src="<c:url value='/resources/js/pages/header.js' />"></script>
+        <script src="<c:url value='/resources/js/pages/master.js' />"></script>
     </head>
     <body>
         <div class="container">

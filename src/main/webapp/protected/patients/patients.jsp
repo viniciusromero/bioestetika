@@ -16,14 +16,15 @@
 	                   required
 	                   ng-model="searchFor"
 	                   name="searchFor"                           
-	                   placeholder="<spring:message code='patient'/>&nbsp;<spring:message code='patients.name'/> "/>
-	            <span class="alert alert-danger"
+	                   placeholder="<spring:message code='patient'/>&nbsp;<spring:message code='patients.name'/> "
+	                   class="form-control"/>
+	            <!-- <span class="alert alert-danger"
 	                  ng-show="displayValidationError && searchPatientForm.searchFor.$error.required">
 	                <spring:message code="required"/>
-	            </span>                   
+	            </span> -->                   
                 
 	            <input type="submit"
-	                  class="btn btn-default"
+	                  class="btn btn-default "
 	                  ng-click="searchPatient(searchPatientForm, false);"
 	                  value='<spring:message code="search"/>' />
 	                              	           
@@ -56,15 +57,8 @@
             </a>
         </div>-->
 
-        <div ng-class="{'alert badge-inverse': displayMessageToUser == true, 'none': displayMessageToUser == false}">
-            <h4 class="displayInLine">
-                <p class="messageToUser displayInLine"><i class="icon-info-sign"></i>&nbsp;{{page.actionMessage}}</p>
-            </h4>
-        </div>
-
-        <div ng-class="{'alert alert-block alert-error': state == 'error', 'none': state != 'error'}">
+        <div ng-class="{'alert alert-block alert-danger': state == 'error', 'none': state != 'error'}">
             <h4><i class="icon-info-sign"></i> <spring:message code="error.generic.header"/></h4><br/>
-
             <p><spring:message code="error.generic.text"/></p>
         </div>
 
@@ -86,9 +80,9 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="patient in page.source">
-                    <td ng-click="addPatientSession(patient);" class="tdTableData">{{patient.id}}</td>
-                    <td ng-click="addPatientSession(patient);" class="tdTableData">{{patient.name}}</td>
-                    <td ng-click="addPatientSession(patient);" class="tdTableData">{{patient.dob | date:'dd/MM/yyyy'}}</td>
+                    <td class="tdTableData">{{patient.id}}</td>
+                    <td class="tdTableData">{{patient.name}}</td>
+                    <td class="tdTableData">{{patient.dob | date:'dd/MM/yyyy'}}</td>
                     <td class="width15">
                         <div class="text-center">
                             <input type="hidden" value="{{patient.id}}"/>
@@ -99,12 +93,19 @@
                                class="btn btn-default" data-toggle="modal">
                                 <i class="glyphicon glyphicon-pencil"></i>
                             </a>
-                            <a href="#deletePatientsModal"
+                            <!-- <a href="#deletePatientsModal"
                                ng-click="selectedPatient(patient);"
                                role="button"
                                title="<spring:message code="delete"/>&nbsp;<spring:message code="patient"/>"
                                class="btn btn-default" data-toggle="modal">
                                 <i class="glyphicon glyphicon-remove"></i>
+                            </a> -->
+                            <a ng-href="{{urladmission}}"
+                               ng-click="addPatientSession(patient);"
+                               role="button"
+                               title="<spring:message code="list"/>&nbsp;<spring:message code="admissions"/>"
+                               class="btn btn-default" data-toggle="modal">
+                                <i class="glyphicon glyphicon-list"></i>
                             </a>
                         </div>
                     </td>

@@ -17,12 +17,17 @@
 							<p><spring:message code="header.patients"/></p>
 						</a>
 					</li>
-					<li ng-class="{'active': activeURL == 'admissions', '': activeURL != 'admissions'}">
+					<li ng-class="{'active': activeURL == 'admissions', 'none': ((activeURL != 'admissions') && (activeURL != 'anameneses')), '': activeURL == 'anameneses'}">
 						<a title='<spring:message code="header.admissions"/>' href="<c:url value='/protected/admissions'/>">
 							<p><spring:message code="header.admissions"/></p>
 						</a>
 					</li>
-					
+					<li ng-class="{'active': activeURL == 'anameneses', 'none': activeURL != 'anameneses'}">
+						<a title='<spring:message code="header.anameneses"/>' href="<c:url value='/protected/anameneses'/>">
+							<p><spring:message code="header.anameneses"/></p>
+						</a>
+					</li>
+					 
 					<li class="pull-right"><a href="<c:url value='/logout' />" title='<spring:message code="header.logout"/>'><p class="displayInLine"><spring:message code="header.logout"/>&nbsp;</p></a></li>
                 </ul> 
   </div>

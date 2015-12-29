@@ -197,18 +197,10 @@ body {
 }
 
 .tdTableData {
+	cursor:pointer;	
+}
+
+.tdTableDataSelected {
 	cursor:pointer;
-	
-}
-
-#deleteContactsModal {
-    width: 500px;
-    height: 220px;
-    overflow: hidden;
-}
-
-#searchContactsModal {
-    width: 500px;
-    height: 180px;
-    overflow: hidden;
+	background-color: #FFFF66;
 }

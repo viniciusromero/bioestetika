@@ -15,7 +15,7 @@
 	    	<spring:message code="login.error" />
 	    </div>
 	   	<form method="post" action="j_spring_security_check">    		
-			<input name="j_username" id="j_username" type="text" placeholder="<spring:message code='sample.email' /> "><br><br>
+			<input name="j_username" id="j_username" type="text" placeholder="<spring:message code='sample.email'/> "><br><br>
 	        <input name="j_password" id="j_password" type="password"  placeholder="Password"><br/><br>
 	        <button type="submit" name="submit" class="btn btn-primary"><spring:message code="login.signIn" /></button>   		
 	    </form>    	

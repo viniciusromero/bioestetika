@@ -32,7 +32,7 @@ public class PatientService {
     }
 
     public void save(Patient Patient) {
-        PatientRepository.save(Patient);
+        PatientRepository.save(Patient);        
     }
 
     @Secured("ROLE_ADMIN")

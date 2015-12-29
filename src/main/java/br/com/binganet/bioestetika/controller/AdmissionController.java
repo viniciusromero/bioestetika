@@ -12,31 +12,40 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import br.com.binganet.bioestetika.vo.AdmissionListVO;
+import br.com.binganet.bioestetika.model.Admission;
 import br.com.binganet.bioestetika.model.Patient;
 import br.com.binganet.bioestetika.service.AdmissionService;
 
 @Controller
 @RequestMapping(value = "/protected/admissions")
+@SessionAttributes("admissionSelected")
 public class AdmissionController {
-
+	
+	private static final String DEFAULT_PAGE_DISPLAYED_TO_USER = "0";
+	
 	@Autowired
     private AdmissionService admissionService;
-
+	
     @Autowired
     private MessageSource messageSource;
 
     @Value("5")
     private int maxResults;
     
+    private ModelAndView modelAndView;
+    
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView welcome() {
-        return new ModelAndView("admissionsList");
+    	modelAndView = new ModelAndView("admissionsList");
+        return modelAndView;
     }
     
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
@@ -51,18 +60,43 @@ public class AdmissionController {
     	return new ResponseEntity<Patient>(patient, HttpStatus.OK);
     }
     
-    @RequestMapping(value = "/{patientId}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/patient/{patientId}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<?> listAll(HttpSession session, @PathVariable("patientId") int patientId, @RequestParam int page, Locale locale) {
-    	
-    	if (!isNull(session.getAttribute("patientSelected")))
-    	{
-    		Patient patient = (Patient)session.getAttribute("patientSelected");
-    		System.out.println("Id do Paciente:"+patient.getId());
-    	}
-    	
         return createListAllResponse(patientId, page, locale);    	
     }
-        
+    
+    @RequestMapping(method = RequestMethod.POST, produces = "application/json")
+    public ResponseEntity<?> create(@RequestBody Admission admission,                                    
+                                    @RequestParam(required = false, defaultValue = DEFAULT_PAGE_DISPLAYED_TO_USER) int page,
+                                    Locale locale) {
+    	
+        admissionService.save(admission);
+
+        return createListAllResponse(admission.getPatient().getId(), page, locale, "message.create.success");
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = "application/json")
+    public ResponseEntity<?> update(@PathVariable("id") int admissionId,
+                                    @RequestBody Admission admission,                                    
+                                    @RequestParam(required = false, defaultValue = DEFAULT_PAGE_DISPLAYED_TO_USER) int page,
+                                    Locale locale) {
+    	if (admissionId != admission.getId()) {
+            return new ResponseEntity<String>("Bad Request", HttpStatus.BAD_REQUEST);
+        }
+
+    	admissionService.save(admission);
+
+        return createListAllResponse(admission.getPatient().getId(), page, locale, "message.create.success");
+    }
+    
+    @RequestMapping(value="/addAdmissionSession")
+    public ModelAndView selectPatient(HttpSession session, @RequestBody Admission admission){      	    	    	
+    	modelAndView.addObject("admissionSelected", admission);    	        	    	    	    
+    	
+    	return modelAndView;
+    }
+    
+    
     private AdmissionListVO listAll(int page, int patientId) {
         return admissionService.findAll(page, maxResults, patientId);
     }

@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <div id="addPatientsModal"
@@ -19,11 +18,12 @@
 		            <div class="input-append">	
 		            	<p/>	 		            	     	
 		            	<div class="row">
-		            		<div class="col-md-2">		            	
+		            		<div class="col-md-3">		            	
 	                    	<label>* <spring:message code="patients.name"/>:</label>
 	                    	</div>
-	                    	<div class="col-md-3" border=1>
+	                    	<div class="col-md-7" border=1>
 		                    <input type="text"
+		                           class="form-control"
 		                           required
 		                           autofocus
 		                           ng-model="patient.name"
@@ -40,16 +40,19 @@
 		            <div class="input-append">
 		             	<p/>
 		             	<div class="row">
-			             	<div class="col-md-2">
+			             	<div class="col-md-3">
 		                 	<label>* <spring:message code="patients.dob"/>:</label>
 		                 	</div>
-		                 	<div class="col-md-5">
+		                 	<div class="col-md-7">
 							<input type="text"
-							       required
+								   class="form-control"
+								   required
 							       ng-model="patient.dob"
 							       name="dob"
-							       placeholder="<spring:message code='sample.dob'/>"
-							       ui-date-mask/>
+							       placeholder="<spring:message code='sample.date'/>"
+							       OnKeyPress="mascaraData(event, this);"
+							       OnKeyUp="mascaraData(event, this);" OnBlur="verificaData(this);" maxlength="10"/>
+							
 					        <span class="alert alert-danger"
 					              ng-show="displayValidationError && newPatientForm.dob.$error.required">
 					            <spring:message code="required"/>
@@ -61,11 +64,12 @@
 		            <div class="input-append">
 		            	<p/>
 		            	<div class="row">
-		            		<div class="col-md-2">
+		            		<div class="col-md-3">
 		                    <label>* <spring:message code="patients.email"/>:</label>
 		                    </div>
-		                    <div class="col-md-3">
+		                    <div class="col-md-7">
 		                    <input type="text"
+		                    	   class="form-control"
 		                           required
 		                           ng-model="patient.email"
 		                           name="email"
@@ -81,11 +85,12 @@
 		            <div class="input-append">
 		            	<p/>
 		            	<div class="row">
-			            	<div class="col-md-2">
+			            	<div class="col-md-3">
 		                    <label>* <spring:message code="patients.mobilephone"/>:</label>
 		                    </div>
-		                    <div class="col-md-3">
+		                    <div class="col-md-7">
 		                    <input type="text"
+		                    	   class="form-control"
 		                            required
 		                            ng-model="patient.mobilephone"
 		                            name="mobilephone"
@@ -101,7 +106,11 @@
 		        </form>
 		        
 		    </div>
-		    <div class="modal-footer">		                                    
+		    <div class="modal-footer">	
+		    	 <span class="alert alert-danger"
+	        	 	   ng-show="errorOnSubmit">
+	        	       <spring:message code="request.error"/>
+	    		 </span>    		                                    
 	             <button class="btn btn-default"
 	                     data-dismiss="modal"
 	                     ng-click="exit('#addPatientsModal');"
@@ -112,12 +121,7 @@
 	                    class="btn btn-primary"
 	                    ng-click="createPatient(newPatientForm);"
 	                    value='<spring:message code="create"/>'/>
-       		</div>
-           
-		    <span class="alert alert-error dialogErrorMessage"
-		          ng-show="errorOnSubmit">
-		        <spring:message code="request.error"/>
-		    </span>
+       		</div>           
 		</div>	
 	</div>    
 </div>
@@ -136,27 +140,27 @@
 	        </h3>
 	    </div>
 	    <div class="modal-body">
-	        <form name="updatePatientForm" novalidate>
+	        <form name="updatePatientForm" class="form-inline" novalidate>
 	            <input type="hidden"
 	                   required
 	                   ng-model="patient.id"
 	                   name="id"
 	                   value="{{patient.id}}"/>
-				<form name="newPatientForm" class="form-inline" novalidate >		        	     
-		            <div class="input-append">	
+				    <div class="input-append">	
 		            	<p/>	 		            	     	
 		            	<div class="row">
-		            		<div class="col-md-2">		            	
+		            		<div class="col-md-3">		            	
 	                    	<label>* <spring:message code="patients.name"/>:</label>
 	                    	</div>
-	                    	<div class="col-md-3" border=1>
+	                    	<div class="col-md-7" border=1>
 		                    <input type="text"
 		                           required
 		                           autofocus
 		                           ng-model="patient.name"
 		                           name="name"
 		                           placeholder="<spring:message code='patient'/>&nbsp;<spring:message code='patients.name'/>"
-		                           value="{{patient.name}}"/>	                    
+		                           value="{{patient.name}}"
+		                           class="form-control"/>	                    
 	                        <span class="alert alert-danger"
 	                              ng-show="displayValidationError && newPatientForm.name.$error.required">
 	                                <spring:message code="required"/>
@@ -168,37 +172,42 @@
 		            <div class="input-append">
 		             	<p/>
 		             	<div class="row">
-			             	<div class="col-md-2">
+			             	<div class="col-md-3">
 		                 	<label>* <spring:message code="patients.dob"/>:</label>
 		                 	</div>
-		                 	<div class="col-md-5">
+		                 	<div class="col-md-7">
 							<input type="text"
-							       required
+								   required							       
 							       ng-model="patient.dob"
 							       name="dob"
-							       placeholder="<spring:message code='sample.dob'/> "
-							       value="{{patient.dob | date : 'dd/MM/yyyy'}}"/>
+							       placeholder="<spring:message code='sample.date'/> "
+							       value="{{patient.dob | date : 'dd/MM/yyyy'}}"
+							       class="form-control"
+							       OnKeyPress="mascaraData(event, this);"
+							       OnKeyUp="mascaraData(event, this);" OnBlur="verificaData(this);" maxlength="10"/>
 					        <span class="alert alert-danger"
 					              ng-show="displayValidationError && newPatientForm.dob.$error.required">
 					            <spring:message code="required"/>
 					        </span>
+					        
 					        </div>
-				        </div>
+					    </div>					        						        					        						        						        					       
 				        <p/>
 		            </div>	
 		            <div class="input-append">
 		            	<p/>
 		            	<div class="row">
-		            		<div class="col-md-2">
+		            		<div class="col-md-3">
 		                    <label>* <spring:message code="patients.email"/>:</label>
 		                    </div>
-		                    <div class="col-md-3">
+		                    <div class="col-md-7">
 		                    <input type="text"
 		                           required
 		                           ng-model="patient.email"
 		                           name="email"
 		                           placeholder="<spring:message code='sample.email'/> "
-		                           value="{{patient.email}}"/>
+		                           value="{{patient.email}}"
+		                           class="form-control"/>
 	                        <span class="alert alert-danger"
 	                              ng-show="displayValidationError && newPatientForm.email.$error.required">
 	                            <spring:message code="required"/>
@@ -210,16 +219,17 @@
 		            <div class="input-append">
 		            	<p/>
 		            	<div class="row">
-			            	<div class="col-md-2">
+			            	<div class="col-md-3">
 		                    <label>* <spring:message code="patients.mobilephone"/>:</label>
 		                    </div>
-		                    <div class="col-md-3">
+		                    <div class="col-md-7">
 		                    <input type="text"
 		                            required
 		                            ng-model="patient.mobilephone"
 		                            name="mobilephone"
 		                            placeholder="<spring:message code='sample.phone'/> "
-		                            value="{{patient.mobilephone}}"/>
+		                            value="{{patient.mobilephone}}"
+		                            class="form-control"/>
 	                        <span class="alert alert-danger"
 	                              ng-show="displayValidationError && newPatientForm.mobilephone.$error.required">
 	                            <spring:message code="required"/>
@@ -231,7 +241,11 @@
 		        </form>	            
 	        </form>
 	    </div>
-	    <div class="modal-footer">	    	
+	    <div class="modal-footer">	
+	    	<span class="alert alert-danger"
+	        	  ng-show="errorOnSubmit">
+	        	  <spring:message code="request.error"/>
+	    	</span>    	
             <button class="btn btn-default"
                     data-dismiss="modal"
                     ng-click="exit('#updatePatientsModal');"
@@ -241,11 +255,8 @@
                    class="btn btn-primary"
                    ng-click="updatePatient(updatePatientForm);"
                    value='<spring:message code="update"/>'/>
-		</div>	                    
-	    <span class="alert alert-error dialogErrorMessage"
-	          ng-show="errorOnSubmit">
-	        <spring:message code="request.error"/>
-	    </span>
+			                   
+		</div>	                    	    
 	</div>	
 	</div>    
 </div>

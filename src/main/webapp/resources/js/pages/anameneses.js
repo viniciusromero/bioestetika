@@ -1,4 +1,4 @@
-function admissionsController($scope, $http, $filter) {
+function anamenesesController($scope, $http, $filter) {
     $scope.pageToGet = 0;
 
     $scope.state = 'busy';
@@ -6,8 +6,7 @@ function admissionsController($scope, $http, $filter) {
     
     $scope.lastAction = '';
 
-    $scope.url = "/bioestetika/protected/admissions/";
-    $scope.urlanamenese = "/bioestetika/protected/anameneses/";
+    $scope.url = "/bioestetika/protected/anameneses/";
     
     $scope.errorOnSubmit = false;
     $scope.errorIllegalAccess = false;
@@ -15,18 +14,18 @@ function admissionsController($scope, $http, $filter) {
     $scope.displayValidationError = false;
     $scope.displaySearchMessage = false;
     $scope.displaySearchButton = true;
-    $scope.displayCreateAdmissionButton = false;
+    $scope.displayCreateanameneseButton = false;
     
-    $scope.admission = {};
+    $scope.anamenese = {};
     
-    $scope.getPatientSession = function () {
+    $scope.getAdmissionSession = function () {
         $scope.lastAction = 'list';               
         
         $http.get($scope.url)
             .success(function (data) {            	
-            	$scope.patient = data;            	
-            	if ($scope.patient.id > 0) {
-            		$scope.getAdmissionList();
+            	$scope.admission = data;            	
+            	if ($scope.admission.id > 0) {
+            		$scope.getAnameneseList();
             	}
             	else {
             		$scope.state = 'nosession';
@@ -34,16 +33,16 @@ function admissionsController($scope, $http, $filter) {
             })
             .error(function () {
                 $scope.state = 'error';
-                $scope.displayCreateAdmissionButton = false;
+                $scope.displayCreateAnameneseButton = false;
             });
     }
     
-    $scope.getAdmissionList = function () {
-        if (!($scope.patient.id)) {            
+    $scope.getAnameneseList = function () {
+        if (!($scope.admission.id)) {            
             return;
         }
         
-    	var url = $scope.url + 'patient/' + $scope.patient.id;
+    	var url = $scope.url + 'admission/' + $scope.admission.id;
         $scope.lastAction = 'list';               
         
         $scope.startDialogAjaxRequest();
@@ -55,7 +54,7 @@ function admissionsController($scope, $http, $filter) {
             })
             .error(function () {
                 $scope.state = 'error';
-                $scope.displayCreateAdmissionButton = false;
+                $scope.displayCreateAnameneseButton = false;
             });
     }
     
@@ -63,18 +62,18 @@ function admissionsController($scope, $http, $filter) {
         if (data.pagesCount > 0) {
             $scope.state = 'list';
 
-            $scope.page = {source: data.admissions, currentPage: $scope.pageToGet, pagesCount: data.pagesCount, totalAdmissions : data.totalAdmissions};
+            $scope.page = {source: data.anameneses, currentPage: $scope.pageToGet, pagesCount: data.pagesCount, totalAnameneses : data.totalAnameneses};
 
             if($scope.page.pagesCount <= $scope.page.currentPage){
                 $scope.pageToGet = $scope.page.pagesCount - 1;
                 $scope.page.currentPage = $scope.page.pagesCount - 1;
             }
 
-            $scope.displayCreateAdmissionButton = true;
+            $scope.displayCreateAnameneseButton = true;
             $scope.displaySearchButton = true;
         } else {
             $scope.state = 'noresult';
-            $scope.displayCreateAdmissionButton = true;
+            $scope.displayCreateAnameneseButton = true;
 
             if(!$scope.searchFor){
                 $scope.displaySearchButton = false;
@@ -94,13 +93,13 @@ function admissionsController($scope, $http, $filter) {
     $scope.changePage = function (page) {
         $scope.pageToGet = page;
 
-        $scope.getAdmissionList();        
+        $scope.getPatientList();        
     };
 
     $scope.exit = function (modalId) {
         $(modalId).modal('hide');
 
-        $scope.admission = {};
+        $scope.anamenese = {};
         $scope.errorOnSubmit = false;
         $scope.errorIllegalAccess = false;
         $scope.displayValidationError = false;
@@ -149,26 +148,18 @@ function admissionsController($scope, $http, $filter) {
 
     }
 
-    $scope.resetAdmission = function(){
-        $scope.admission = {};        
-        $scope.admission.patient = $scope.patient;
+    $scope.resetAnamenese = function(){
+        $scope.anamenese = {};        
+        $scope.anamenese.admission = $scope.admission;
     };
 
-    $scope.selectedAdmission = function (admission) {    	
-    	$scope.admission = angular.copy(admission);
-    	$scope.configAdmissionForm();
+    $scope.selectedAnamenese = function (anamenese) {    	
+    	$scope.anamenese = angular.copy(anamenese);
+    	$scope.configAnameneseForm();
     }
     
-    $scope.addAdmissionSession = function (admission)
-    {    	
-    	$scope.lastAction = 'addAdmissionSession';
-    	var url = $scope.url + $scope.lastAction
-     	$http.post(url, admission);
-    	$scope.stateLn = 'selected';
-    }
-    
-    $scope.createAdmission = function (newAdmissionForm) {
-        if (!newAdmissionForm.$valid) {
+    $scope.createAnamenese = function (newAnameneseForm) {
+        if (!newAnameneseForm.$valid) {
             $scope.displayValidationError = true;
             return;
         }
@@ -180,62 +171,58 @@ function admissionsController($scope, $http, $filter) {
         var config = {};
         
         $scope.addSearchParametersIfNeeded(config, false);
-        $scope.configAdmissionPost();
+        $scope.configAnamenesePost();
         
         $scope.startDialogAjaxRequest();
                
-        $http.post(url, $scope.admission, config)
+        $http.post(url, $scope.anamenese, config)
             .success(function (data) {
             	
-                $scope.finishAjaxCallOnSuccess(data, "#addAdmissionsModal", false);
+                $scope.finishAjaxCallOnSuccess(data, "#addAnamenesesModal", false);
             })
             .error(function(data, status, headers, config) {
-            	$scope.configAdmissionForm();
+            	$scope.configAnameneseForm();
                 $scope.handleErrorInDialogs(status);
             });
     };
 
-    $scope.updateAdmission = function (updateAdmissionForm) {
-        if (!updateAdmissionForm.$valid) {
+    $scope.updateAnamenese = function (updateAnameneseForm) {
+        if (!updateAnameneseForm.$valid) {
             $scope.displayValidationError = true;
             return;
         }
         $scope.lastAction = 'update';
         
-        var url = $scope.url + $scope.admission.id;
+        var url = $scope.url + $scope.anamenese.id;
 
         var config = {};
         $scope.addSearchParametersIfNeeded(config, false);
         
-        $scope.configAdmissionPost();
+        $scope.configAnamenesePost();
         
         $scope.startDialogAjaxRequest();
         
-        $http.put(url, $scope.admission, config)
+        $http.put(url, $scope.anamenese, config)
             .success(function (data) {
-                $scope.finishAjaxCallOnSuccess(data, "#updateAdmissionsModal", false);
+                $scope.finishAjaxCallOnSuccess(data, "#updateAnamenesesModal", false);
             })
             .error(function(data, status, headers, config) { 
-            	$scope.configAdmissionForm();
+            	$scope.configAnameneseForm();
             	$scope.handleErrorInDialogs(status);           
             });
     };
 
-    $scope.configAdmissionPost = function()
+    $scope.configAnamenesePost = function()
     {
-    	$scope.admission.admdate = parseDateTo($scope.admission.admdate);
-    	$scope.admission.admtime = parseTimeTo($scope.admission.admtime);
-    	$scope.admission.dischgdate = parseDateTo($scope.admission.dischgdate);
-    	$scope.admission.dischgtime = parseTimeTo($scope.admission.dischgtime);
+    	$scope.anamenese.updatedate = parseDateTo($scope.anamenese.updatedate);
+    	$scope.anamenese.updatetime = parseTimeTo($scope.anamenese.updatetime);    	
     }
     
-    $scope.configAdmissionForm = function()
+    $scope.configAnameneseForm = function()
     {    	
-    	$scope.admission.admdate = parseDateFrom($scope.admission.admdate);
-    	$scope.admission.dischgdate = parseDateFrom($scope.admission.dischgdate);    	
-    	$scope.admission.admtime = parseTimeFrom($scope.admission.admtime);    	
-    	$scope.admission.dischgtime = parseTimeFrom($scope.admission.dischgtime);
+    	$scope.anamenese.updatedate = parseDateFrom($scope.anamenese.updatedate);
+    	$scope.anamenese.updatetime = parseTimeFrom($scope.anamenese.updatetime);    	    	
     }
     
-    $scope.getPatientSession();
+    $scope.getAdmissionSession();
 }
