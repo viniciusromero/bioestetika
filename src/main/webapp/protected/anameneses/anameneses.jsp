@@ -60,6 +60,8 @@
                 <tr>
                 	<th scope="col"><spring:message code="anameneses.id"/></th>
                     <th scope="col"><spring:message code="anameneses.description"/></th>
+                    <th scope="col"><spring:message code="anameneses.createdate"/></th>
+                    <th scope="col"><spring:message code="anameneses.createtime"/></th>   
                     <th scope="col"><spring:message code="anameneses.updatedate"/></th>
                     <th scope="col"><spring:message code="anameneses.updatetime"/></th>                                       
                     <th scope="col"></th>
@@ -68,7 +70,9 @@
                 <tbody>
                 <tr ng-repeat="anamenese in page.source">                	
                     <td class="tdTableData">{{anamenese.id}}</td>
-                    <td class="tdTableData">{{anamenese.description}}</td>                    
+                    <td class="tdTableData">{{anamenese.description}}</td> 
+                    <td class="tdTableData">{{anamenese.createdate | date:'dd/MM/yyyy'}}</td>
+                    <td class="tdTableData">{{anamenese.createtime | date:'HH:mm'}}</td>                   
                     <td class="tdTableData">{{anamenese.updatedate | date:'dd/MM/yyyy'}}</td>
                     <td class="tdTableData">{{anamenese.updatetime | date:'HH:mm'}}</td>
                     <td class="width15">

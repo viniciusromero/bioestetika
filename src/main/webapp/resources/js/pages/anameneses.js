@@ -3,6 +3,7 @@ function anamenesesController($scope, $http, $filter) {
 
     $scope.state = 'busy';
     $scope.statedetails = '';
+    $scope.navactive = 'general';
     
     $scope.lastAction = '';
 
@@ -17,6 +18,10 @@ function anamenesesController($scope, $http, $filter) {
     $scope.displayCreateanameneseButton = false;
     
     $scope.anamenese = {};
+    
+    $scope.changeNavBar = function (activenavbar) {
+    	$scope.navactive = activenavbar;    	
+    }
     
     $scope.getAdmissionSession = function () {
         $scope.lastAction = 'list';               
@@ -93,7 +98,7 @@ function anamenesesController($scope, $http, $filter) {
     $scope.changePage = function (page) {
         $scope.pageToGet = page;
 
-        $scope.getPatientList();        
+        $scope.getAnameneseList();        
     };
 
     $scope.exit = function (modalId) {
@@ -149,13 +154,14 @@ function anamenesesController($scope, $http, $filter) {
     }
 
     $scope.resetAnamenese = function(){
+    	$scope.navactive = 'general';
         $scope.anamenese = {};        
-        $scope.anamenese.admission = $scope.admission;
+        $scope.anamenese.admission = $scope.admission;                
     };
 
-    $scope.selectedAnamenese = function (anamenese) {    	
-    	$scope.anamenese = angular.copy(anamenese);
-    	$scope.configAnameneseForm();
+    $scope.selectedAnamenese = function (anamenese) {    
+    	$scope.navactive = 'general';
+    	$scope.anamenese = angular.copy(anamenese);    	
     }
     
     $scope.createAnamenese = function (newAnameneseForm) {
@@ -171,7 +177,7 @@ function anamenesesController($scope, $http, $filter) {
         var config = {};
         
         $scope.addSearchParametersIfNeeded(config, false);
-        $scope.configAnamenesePost();
+        $scope.configAnameneseCreatePost();
         
         $scope.startDialogAjaxRequest();
                
@@ -181,8 +187,7 @@ function anamenesesController($scope, $http, $filter) {
                 $scope.finishAjaxCallOnSuccess(data, "#addAnamenesesModal", false);
             })
             .error(function(data, status, headers, config) {
-            	$scope.configAnameneseForm();
-                $scope.handleErrorInDialogs(status);
+            	$scope.handleErrorInDialogs(status);
             });
     };
 
@@ -198,7 +203,7 @@ function anamenesesController($scope, $http, $filter) {
         var config = {};
         $scope.addSearchParametersIfNeeded(config, false);
         
-        $scope.configAnamenesePost();
+        $scope.configAnameneseUpdatePost();
         
         $scope.startDialogAjaxRequest();
         
@@ -212,16 +217,17 @@ function anamenesesController($scope, $http, $filter) {
             });
     };
 
-    $scope.configAnamenesePost = function()
+    $scope.configAnameneseCreatePost = function()
     {
-    	$scope.anamenese.updatedate = parseDateTo($scope.anamenese.updatedate);
-    	$scope.anamenese.updatetime = parseTimeTo($scope.anamenese.updatetime);    	
+    	$scope.anamenese.createdate = parseDateTo('h');
+    	$scope.anamenese.createtime = parseTimeTo('a');
+    	$scope.configAnameneseUpdatePost();
     }
     
-    $scope.configAnameneseForm = function()
-    {    	
-    	$scope.anamenese.updatedate = parseDateFrom($scope.anamenese.updatedate);
-    	$scope.anamenese.updatetime = parseTimeFrom($scope.anamenese.updatetime);    	    	
+    $scope.configAnameneseUpdatePost = function()
+    {
+    	$scope.anamenese.updatedate = parseDateTo('h');
+    	$scope.anamenese.updatetime = parseTimeTo('a');
     }
     
     $scope.getAdmissionSession();

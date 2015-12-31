@@ -12,12 +12,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import br.com.binganet.bioestetika.model.Admission;
+import br.com.binganet.bioestetika.model.Anamenese;
 import br.com.binganet.bioestetika.service.AnameneseService;
 import br.com.binganet.bioestetika.vo.AnameneseListVO;
 
@@ -25,8 +27,10 @@ import br.com.binganet.bioestetika.vo.AnameneseListVO;
 @RequestMapping(value = "/protected/anameneses")
 public class AnameneseController {
 	
+	private static final String DEFAULT_PAGE_DISPLAYED_TO_USER = "0";
+	
 	@Autowired
-    private AnameneseService AnameneseService;
+    private AnameneseService anameneseService;
 
     @Autowired
     private MessageSource messageSource;
@@ -55,9 +59,33 @@ public class AnameneseController {
     public ResponseEntity<?> listAll(HttpSession session, @PathVariable("admissionId") int admissionId, @RequestParam int page, Locale locale) {    	    	    	
         return createListAllResponse(admissionId, page, locale);    	
     }
-        
+       
+    @RequestMapping(method = RequestMethod.POST, produces = "application/json")
+    public ResponseEntity<?> create(@RequestBody Anamenese anamenese,                                    
+                                    @RequestParam(required = false, defaultValue = DEFAULT_PAGE_DISPLAYED_TO_USER) int page,
+                                    Locale locale) {
+    	
+    	anameneseService.save(anamenese);
+
+        return createListAllResponse(anamenese.getAdmission().getId(), page, locale, "message.create.success");
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = "application/json")
+    public ResponseEntity<?> update(@PathVariable("id") int anameneseId,
+                                    @RequestBody Anamenese anamenese,                                    
+                                    @RequestParam(required = false, defaultValue = DEFAULT_PAGE_DISPLAYED_TO_USER) int page,
+                                    Locale locale) {
+    	if (anameneseId != anamenese.getId()) {
+            return new ResponseEntity<String>("Bad Request", HttpStatus.BAD_REQUEST);
+        }
+
+    	anameneseService.save(anamenese);
+
+        return createListAllResponse(anamenese.getAdmission().getId(), page, locale, "message.create.success");
+    }
+    
     private AnameneseListVO listAll(int page, int admissionId) {
-        return AnameneseService.findAll(page, maxResults, admissionId);
+        return anameneseService.findAll(page, maxResults, admissionId);
     }
 
     private ResponseEntity<AnameneseListVO> returnListToUser(AnameneseListVO AnameneseListVO) {

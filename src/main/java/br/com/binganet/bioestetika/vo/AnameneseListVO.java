@@ -31,7 +31,7 @@ public class AnameneseListVO {
         this.pagesCount = pagesCount;
     }
 
-    public List<Anamenese> getAdmissions() {
+    public List<Anamenese> getAnameneses() {
         return Anameneses;
     }
 

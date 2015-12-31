@@ -30,6 +30,10 @@ public class AnameneseService {
         return buildResult(result);
     }
 	
+	public void save(Anamenese anamenese) {
+		AnameneseRepository.save(anamenese);        
+    }
+	
 	private boolean shouldExecuteSameQueryInLastPage(int page, Page<Anamenese> result) {
         return isUserAfterOrOnLastPage(page, result) && hasDataInDataBase(result);
     }
